@@ -1,0 +1,21 @@
+{
+  "app": "{{ app_name }}",
+  "staging": false,
+  "checkedout": false,
+  "application": {
+    "command": "{{ command }}",
+    "parameters": {
+      "command": "{{ command_args }}"
+    },
+    "geometry": "1424x692"
+  },
+  "machine": {
+    "type": "{{ mc_type }}",
+    "nodes": 1
+  },
+  "vault": {
+    "name": "drop.jarvice.com",
+    "force": false,
+    "readonly": false
+  }
+}

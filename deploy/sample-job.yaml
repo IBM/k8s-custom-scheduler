@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nimbix-job
+spec:
+  template:
+    metadata:
+      name: nimbix-gpu
+      labels:
+        task-type: Nimbix
+    spec:
+      schedulerName: k8s-custom-sched
+      restartPolicy: Never
+      containers:
+      - name: nimbix-job
+        image: poweraijob
+        imagePullPolicy: "Never"
+        env:
+        - name:  "APP_NAME"
+          value: "power8-ubuntu-mldl"
+        - name:  "APP_COMMAND"
+          value: "run"
+        - name: "APP_COMMAND_ARGS"
+          value: "source /opt/DL/bazel/bin/bazel-activate && source /opt/DL/tensorflow/bin/tensorflow-activate && tensorflow-test"
+        - name:  "ARCH"
+          value: "POWER"
+        - name:  "NUM_CPUS"
+          value: "60"
+        - name:  "NUM_GPUS"
+          value: "2"
+        - name:  "USERNAME"
+          value: "<USERNAME>"
+        - name:  "APIKEY"
+          value: "<APIKEY>"
+        resources:
+          limits:
+            alpha.kubernetes.io/nvidia-gpu: 2
+        command: ["python", "/jarvice_submit.py"]

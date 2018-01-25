@@ -1,0 +1,52 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "name": "k8s-custom-sched",
+    "namespace": "kube-system"
+  },
+  "spec":{
+    "hostNetwork": true,
+    "containers":[
+      {
+        "name": "k8s-custom-sched",
+        "image": "nimbix-sched",
+        "imagePullPolicy": "IfNotPresent",
+        "command": [
+          "/kube-scheduler-nimbix",
+          "--master=https://MASTER_IP:8001",
+          "--leader-elect=false",
+          "--kubeconfig=/etc/cfc/conf/kube-scheduler-config.yaml",
+          "--v=2",
+          "--scheduler-name=k8s-custom-sched",
+          "--port=PORT_NUM"
+        ],
+        "volumeMounts": [
+          {
+            "name": "data",
+            "mountPath": "/etc/cfc/conf"
+          },
+          {
+            "name": "audit",
+            "mountPath": "/var/lib/icp/audit"
+          }
+        ]
+      }
+    ],
+    "nodeName": "MASTER_NODE_NAME",
+    "volumes": [
+      {
+        "name": "data",
+        "hostPath": {
+          "path": "/etc/cfc/conf"
+        }
+      },
+      {
+        "name": "audit",
+        "hostPath": {
+          "path": "/var/lib/icp/audit"
+        }
+      }
+    ]
+  }
+}
