@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #A wrapper around jarvice_cli to submit a job and wait for it to end
 
+from __future__ import print_function
 import os
 from subprocess import check_output, check_call
 import json
@@ -21,13 +22,13 @@ def exec_and_wait(job_json):
        out = check_output(["jarvice_cli", "-username", username, "-apikey", apikey, "submit", "-j", job_json])
        data = json.loads(out)
        job_id = str(data['number'])
-       print "job id is " + job_id
+       print("job id is " + job_id)
        logger.info("job id is %s ", job_id)
        if job_id:
            out = check_output(["jarvice_cli", "-username", username, "-apikey", apikey, "wait_for", "-number", job_id ])
            logger.info("job %s terminated", job_id)
            return 0
-       print "failed to submit job"
+       print("failed to submit job")
        logger.error("failed to submit job")
        return 1
 
@@ -201,7 +202,7 @@ def remote_exec():
          if exec_and_wait("/job.json"):
              logger.info("Error in running jarvice job")
 
-   except Exception, e:
+   except Exception as e:
        logger.error('Unexpected error when running jarvice_cli', exc_info=True)
 
 def main():
@@ -212,7 +213,7 @@ def main():
        app_command_args = os.environ.get("APP_COMMAND_ARGS")
        try:
            check_call(["/bin/bash", "-c", app_command_args])
-       except Exception, e:
+       except Exception as e:
            logger.error('Unexpected error when running command', exc_info=True)
 
 if __name__== "__main__":
